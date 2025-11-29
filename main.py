@@ -38,3 +38,12 @@ async def last(ctx):
         await ctx.send(f"Dernière commande: {last_command}")
     else:
         await ctx.send("Rien dans l'historique.")
+
+@bot.command(name='history')
+async def show_history(ctx):
+    history = command_history.get_all()
+    if history:
+        await ctx.send("Historique des commandes:\n" + "\n".join(history))
+    else:
+        await ctx.send("Rien dans l'historique.")
+
