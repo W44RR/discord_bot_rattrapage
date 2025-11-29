@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import os
 from dotenv import load_dotenv
-from structures import linkedList
+from structures import LinkedList
 
 load_dotenv()
 
@@ -26,3 +26,15 @@ async def on_message(message):
         command_history.add(f"{message.author.name}: {message.content}")
     
     await bot.process_commands(message)
+
+@bot.command()
+async def ping(ctx):
+    await ctx.send('Pong!')
+
+@bot.command(name='last')
+async def last(ctx):
+    last_command = command_history.get_last()
+    if last_command:
+        await ctx.send(f"Dernière commande: {last_command}")
+    else:
+        await ctx.send("Rien dans l'historique.")
