@@ -47,3 +47,14 @@ async def show_history(ctx):
     else:
         await ctx.send("Rien dans l'historique.")
 
+@bot.command(name='clear_history')
+async def clear_history(ctx):
+    command_history.clear()
+    await ctx.send("Historique des commandes supp.")
+
+token = os.getenv('DISCORD_BOT_TOKEN')
+if token:
+    bot.run(token)
+else:
+    print("Le token du bot n'a pas été trouvé.")
+
