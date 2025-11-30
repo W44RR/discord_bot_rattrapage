@@ -38,7 +38,7 @@ class LinkedList:
         self.size = 0
 
 class TreeNode:
-    def __init__(self, text, is_question):
+    def __init__(self, text, is_question, topic=None):
         self.text = text
         self.is_question = is_question
         self.left = None
