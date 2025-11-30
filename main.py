@@ -2,59 +2,41 @@ import discord
 from discord.ext import commands
 import os
 from dotenv import load_dotenv
-from structures import LinkedList
+from structures import LinkedList, DiscussionTree
 
 load_dotenv()
 
 intents = discord.Intents.default()
 intents.message_content = True
 
-bot = commands.Bot(command_prefix='+', intents=intents)
+class MyBot(commands.Bot):
+    def __init__(self):
+        super().__init__(command_prefix='+', intents=intents)
+        self.command_history = LinkedList()
+        self.discussion_tree = DiscussionTree()
 
-command_history = LinkedList()
+    async def setup_hook(self):
+        await self.load_extension('commandes.history')
+        await self.load_extension('commandes.discussion')
+
+bot = MyBot()
 
 @bot.event
 async def on_ready():
     print(f'Connecté en tant que  {bot.user}')
 
-@bot.event
-async def on_message(message):
-    if message.author == bot.user:
-        return
-    
-    if message.content.startswith('+'):
-        command_history.add(f"{message.author.name}: {message.content}")
-    
-    await bot.process_commands(message)
-
 @bot.command()
 async def ping(ctx):
     await ctx.send('Pong!')
 
-@bot.command(name='last')
-async def last(ctx):
-    last_command = command_history.get_last()
-    if last_command:
-        await ctx.send(f"Dernière commande: {last_command}")
-    else:
-        await ctx.send("Rien dans l'historique.")
-
-@bot.command(name='history')
-async def show_history(ctx):
-    history = command_history.get_all()
-    if history:
-        await ctx.send("Historique des commandes:\n" + "\n".join(history))
-    else:
-        await ctx.send("Rien dans l'historique.")
-
-@bot.command(name='clear_history')
-async def clear_history(ctx):
-    command_history.clear()
-    await ctx.send("Historique des commandes supp.")
-
 token = os.getenv('DISCORD_BOT_TOKEN')
 if token:
-    bot.run(token)
+    try:
+        bot.run(token)
+    except discord.errors.PrivilegedIntentsRequired:
+        print("\n[ERREUR] Les 'Privileged Intents' sont requis mais non activés.")
+        print("Veuillez activer 'Message Content Intent' sur le portail développeur Discord.")
+        print("Allez sur: https://discord.com/developers/applications/ -> Votre App -> Bot -> Privileged Gateway Intents\n")
 else:
     print("Le token du bot n'a pas été trouvé.")
 
