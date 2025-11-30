@@ -23,7 +23,7 @@ class LinkedList:
         if self.tail:
             return self.tail.data
         return None
-    
+
     def get_all(self):
         elements = []
         current = self.head
@@ -31,14 +31,14 @@ class LinkedList:
             elements.append(current.data)
             current = current.next
         return elements
-    
+
     def clear(self):
         self.head = None
         self.tail = None
         self.size = 0
 
 class TreeNode:
-    def __init__(self, text, is_question, topic=None):
+    def __init__(self, text, is_question=True, topic=None):
         self.text = text
         self.is_question = is_question
         self.left = None
