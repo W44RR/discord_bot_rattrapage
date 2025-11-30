@@ -8,35 +8,28 @@ load_dotenv()
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.members = True 
 
-class MyBot(commands.Bot):
-    def __init__(self):
-        super().__init__(command_prefix='+', intents=intents)
-        self.command_history = LinkedList()
-        self.discussion_tree = DiscussionTree()
+bot = commands.Bot(command_prefix='!', intents=intents, help_command=None)
 
-    async def setup_hook(self):
-        await self.load_extension('commandes.history')
-        await self.load_extension('commandes.discussion')
-
-bot = MyBot()
+bot.command_history = LinkedList()
+bot.discussion_tree = DiscussionTree()
 
 @bot.event
 async def on_ready():
-    print(f'Connecté en tant que  {bot.user}')
+    print(f'Connecté en tant que {bot.user.name}')
+    await bot.load_extension('cogs.general')
+    await bot.load_extension('cogs.history')
+    await bot.load_extension('cogs.discussion')
+    await bot.load_extension('cogs.persistence')
+    await bot.load_extension('cogs.extras')
 
-@bot.command()
-async def ping(ctx):
-    await ctx.send('Pong!')
-
-token = os.getenv('DISCORD_BOT_TOKEN')
+token = os.getenv('DISCORD_TOKEN')
 if token:
-    try:
-        bot.run(token)
-    except discord.errors.PrivilegedIntentsRequired:
-        print("\n[ERREUR] Les 'Privileged Intents' sont requis mais non activés.")
-        print("Veuillez activer 'Message Content Intent' sur le portail développeur Discord.")
-        print("Allez sur: https://discord.com/developers/applications/ -> Votre App -> Bot -> Privileged Gateway Intents\n")
+    bot.run(token)
 else:
-    print("Le token du bot n'a pas été trouvé.")
-
+    print("Erreur : Le token Discord n'a pas été trouvé dans le fichier .env")
+if token:
+    bot.run(token)
+else:
+    print("Erreur : Le token Discord n'a pas été trouvé dans le fichier .env")
