@@ -9,6 +9,7 @@ class Discussion(commands.Cog):
         self.init_tree()
 
     def init_tree(self):
+<<<<<<< HEAD
         root = TreeNode("Aimes-tu les animés de combat et d'action ?", True, "action")
         
         q_long_classic = TreeNode("Aimes-tu les classiques avec beaucoup d'épisodes ?", True, "classique")
@@ -42,6 +43,51 @@ class Discussion(commands.Cog):
         
         q_music.left = res_ylia
         q_music.right = res_golden_time
+=======
+        # Racine : Action ou pas ?
+        root = TreeNode("Aimes-tu les animés de combat et d'action ?", True, "action")
+        
+        # Branche Action (Gauche = Oui)
+        q_long_classic = TreeNode("Aimes-tu les classiques avec beaucoup d'épisodes ?", True, "classique")
+        
+        # Branche Non-Action (Droite = Non) -> Romance/Drame
+        q_romance = TreeNode("Cherches-tu une histoire de romance émouvante ?", True, "romance")
+        
+        # Sous-branche Action -> Classique (Gauche = Oui)
+        q_ninja = TreeNode("Préfères-tu les ninjas aux guerriers de l'espace ?", True, "ninja")
+        res_jjk = TreeNode("Tu devrais regarder Jujutsu Kaisen !", False, "jujutsu kaisen")
+        
+        # Résultats Action
+        res_naruto = TreeNode("Tu devrais regarder Naruto !", False, "naruto")
+        res_dbz = TreeNode("Tu devrais regarder Dragon Ball Z !", False, "dbz")
+        
+        # Sous-branche Romance (Gauche = Oui)
+        q_music = TreeNode("La musique est-elle importante pour toi ?", True, "musique")
+        res_death_note = TreeNode("Alors essaie Death Note pour le suspense !", False, "death note")
+        
+        # Résultats Romance
+        res_ylia = TreeNode("Tu devrais regarder Your Lie in April !", False, "your lie in april")
+        res_golden_time = TreeNode("Tu devrais regarder Golden Time !", False, "golden time")
+
+        # Construction de l'arbre
+        root.left = q_long_classic
+        root.right = q_romance
+        
+        # Action
+        q_long_classic.left = q_ninja      # Oui classiques
+        q_long_classic.right = res_jjk     # Non classiques (moderne)
+        
+        q_ninja.left = res_naruto          # Oui ninjas
+        q_ninja.right = res_dbz            # Non (donc DBZ)
+        
+        # Romance / Autre
+        q_romance.left = q_music           # Oui romance
+        q_romance.right = res_death_note   # Non romance (donc thriller)
+        
+        q_music.left = res_ylia            # Oui musique
+        q_music.right = res_golden_time    # Non musique
+
+>>>>>>> 9f806fa0ac9322181c11455d4f89dfdf380a1ce1
         self.bot.discussion_tree.set_root(root)
 
     @commands.Cog.listener()
