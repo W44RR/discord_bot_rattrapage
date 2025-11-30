@@ -9,26 +9,39 @@ class Discussion(commands.Cog):
         self.init_tree()
 
     def init_tree(self):
-        root = TreeNode("Aimes-tu le développement Web ?", True, "web")
+        root = TreeNode("Aimes-tu les animés de combat et d'action ?", True, "action")
         
-        left_web = TreeNode("Préfères-tu le visuel et l'interface ?", True, "frontend")
-        right_no_web = TreeNode("Aimes-tu l'analyse de données ?", True, "data")
+        q_long_classic = TreeNode("Aimes-tu les classiques avec beaucoup d'épisodes ?", True, "classique")
         
-        res_html = TreeNode("Tu devrais apprendre HTML, CSS et JavaScript !", False, "javascript")
-        res_backend = TreeNode("Tu devrais apprendre PHP ou Node.js !", False, "backend")
+        q_romance = TreeNode("Cherches-tu une histoire de romance émouvante ?", True, "romance")
         
-        res_python = TreeNode("Tu devrais apprendre Python !", False, "python")
-        res_cpp = TreeNode("Tu devrais apprendre C++ ou Java !", False, "logiciel")
+        q_ninja = TreeNode("Préfères-tu les ninjas aux guerriers de l'espace ?", True, "ninja")
+        res_jjk = TreeNode("Tu devrais regarder Jujutsu Kaisen !", False, "jujutsu kaisen")
+        
+        res_naruto = TreeNode("Tu devrais regarder Naruto !", False, "naruto")
+        res_dbz = TreeNode("Tu devrais regarder Dragon Ball Z !", False, "dbz")
+        
+        q_music = TreeNode("La musique est-elle importante pour toi ?", True, "musique")
+        res_death_note = TreeNode("Alors essaie Death Note pour le suspense !", False, "death note")
+        
+        res_ylia = TreeNode("Tu devrais regarder Your Lie in April !", False, "your lie in april")
+        res_golden_time = TreeNode("Tu devrais regarder Golden Time !", False, "golden time")
 
-        root.left = left_web
-        root.right = right_no_web
+        root.left = q_long_classic
+        root.right = q_romance
         
-        left_web.left = res_html
-        left_web.right = res_backend
+        q_long_classic.left = q_ninja 
+        q_long_classic.right = res_jjk
         
-        right_no_web.left = res_python
-        right_no_web.right = res_cpp
+        q_ninja.left = res_naruto
+        q_ninja.right = res_dbz
         
+        # Romance / Autre
+        q_romance.left = q_music
+        q_romance.right = res_death_note
+        
+        q_music.left = res_ylia
+        q_music.right = res_golden_time
         self.bot.discussion_tree.set_root(root)
 
     @commands.Cog.listener()
